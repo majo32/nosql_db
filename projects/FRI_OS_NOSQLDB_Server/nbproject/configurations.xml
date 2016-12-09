@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="../../src/main/server" name="0">
+      <df name="allocator">
+        <in>Allocator.c</in>
+      </df>
+      <df name="dynamic_string">
+        <in>DynamicString.c</in>
+      </df>
+      <df name="file_utils">
+        <in>FileHandler.c</in>
+      </df>
+      <df name="nosql_db">
+        <in>NoSqlDBBlockSet.c</in>
+        <in>NoSqlDBFile.c</in>
+        <in>NoSqlDBHandler.c</in>
+      </df>
+      <in>newmain.cpp</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>../../src/main/server/CMakeLists.txt</itemPath>
+      <itemPath>build/Makefile</itemPath>
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>../../src/main/server</Elem>
+  </sourceRootList>
+  <projectmakefile>build/Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>build</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>../../src/main/server/include</pElem>
+              <pElem>../../src/main/common/include</pElem>
+            </incDir>
+          </cTool>
+          <ccTool>
+            <incDir>
+              <pElem>../../src/main/server/include</pElem>
+              <pElem>../../src/main/common/include</pElem>
+              <pElem>build</pElem>
+            </incDir>
+          </ccTool>
+        </makeTool>
+        <preBuild>
+          <preBuildCommandWorkingDir>build</preBuildCommandWorkingDir>
+          <preBuildCommand>${CMAKE} -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=${IDE_CC} -DCMAKE_CXX_COMPILER=${IDE_CXX} -DCMAKE_C_FLAGS_DEBUG="-g3 -gdwarf-2" -DCMAKE_CXX_FLAGS_DEBUG="-g3 -gdwarf-2" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..\..\..\src\main\server</preBuildCommand>
+        </preBuild>
+        <requiredProjects>
+          <makeArtifact PL="../FRI_OS_NOSQLDB_Main"
+                        CT="0"
+                        CN="Default"
+                        AC="true"
+                        BL="false"
+                        WD="../FRI_OS_NOSQLDB_Main/build"
+                        BC="${MAKE} -f Makefile"
+                        CC="${MAKE} -f Makefile clean"
+                        OP="">
+          </makeArtifact>
+        </requiredProjects>
+      </makefileType>
+      <item path="../../src/main/server/allocator/Allocator.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="../../src/main/server/dynamic_string/DynamicString.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/file_utils/FileHandler.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/newmain.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="../../src/main/server/nosql_db/NoSqlDBBlockSet.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/nosql_db/NoSqlDBFile.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="../../src/main/server/nosql_db/NoSqlDBHandler.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <folder path="0/allocator">
+        <cTool>
+          <incDir>
+            <pElem>build/allocator</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/dynamic_string">
+        <cTool>
+          <incDir>
+            <pElem>build/dynamic_string</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/file_utils">
+        <cTool>
+          <incDir>
+            <pElem>build/file_utils</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/nosql_db">
+        <cTool>
+          <incDir>
+            <pElem>build/nosql_db</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+    </conf>
+  </confs>
+</configurationDescriptor>

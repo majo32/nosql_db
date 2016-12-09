@@ -1,0 +1,22 @@
+cmake_minimum_required (VERSION 2.8.4)
+
+project (FRI_OS_NOSQLDB_Server)
+
+include_directories(include)
+include_directories(../common/include)
+
+add_subdirectory(allocator)
+add_subdirectory(dynamic_string)
+add_subdirectory(file_utils)
+add_subdirectory(nosql_db)
+
+add_library(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE)
+
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE allocator)
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE dynamic_string)
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE file_utils)
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE nosql_db)
+
+add_executable(FRI_OS_NOSQLDB_Server newmain.cpp)
+
+target_link_libraries(FRI_OS_NOSQLDB_Server FRI_OS_NOSQLDB_Server_lib_bundle)
