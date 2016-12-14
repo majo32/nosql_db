@@ -4,4 +4,4 @@ project (FRI_OS_NOSQLDB_Client)
 
 include_directories("include")
 
-add_executable(FRI_OS_NOSQLDB_Client newmain.cpp)
+add_executable(FRI_OS_NOSQLDB_Client main.c)

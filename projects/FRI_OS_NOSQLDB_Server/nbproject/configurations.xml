@@ -5,6 +5,9 @@
       <df name="allocator">
         <in>Allocator.c</in>
       </df>
+      <df name="db_server">
+        <in>DBServer.c</in>
+      </df>
       <df name="dynamic_string">
         <in>DynamicString.c</in>
       </df>
@@ -12,11 +15,19 @@
         <in>FileHandler.c</in>
       </df>
       <df name="nosql_db">
+        <in>NoSqlDB.c</in>
         <in>NoSqlDBBlockSet.c</in>
         <in>NoSqlDBFile.c</in>
         <in>NoSqlDBHandler.c</in>
+        <in>NoSqlDBUtils.c</in>
       </df>
-      <in>newmain.cpp</in>
+      <df name="reader">
+        <in>Reader.c</in>
+      </df>
+      <df name="server">
+        <in>TcpServer.c</in>
+      </df>
+      <in>main.c</in>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -46,24 +57,18 @@
           <buildCommandWorkingDir>build</buildCommandWorkingDir>
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
-          <executablePath></executablePath>
+          <executablePath>build\FRI_OS_NOSQLDB_Server.exe</executablePath>
           <cTool>
             <incDir>
               <pElem>../../src/main/server/include</pElem>
               <pElem>../../src/main/common/include</pElem>
             </incDir>
           </cTool>
-          <ccTool>
-            <incDir>
-              <pElem>../../src/main/server/include</pElem>
-              <pElem>../../src/main/common/include</pElem>
-              <pElem>build</pElem>
-            </incDir>
-          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>build</preBuildCommandWorkingDir>
           <preBuildCommand>${CMAKE} -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=${IDE_CC} -DCMAKE_CXX_COMPILER=${IDE_CXX} -DCMAKE_C_FLAGS_DEBUG="-g3 -gdwarf-2" -DCMAKE_CXX_FLAGS_DEBUG="-g3 -gdwarf-2" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..\..\..\src\main\server</preBuildCommand>
+          <preBuildFirst>true</preBuildFirst>
         </preBuild>
         <requiredProjects>
           <makeArtifact PL="../FRI_OS_NOSQLDB_Main"
@@ -81,7 +86,12 @@
       <item path="../../src/main/server/allocator/Allocator.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/db_server/DBServer.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
       </item>
       <item path="../../src/main/server/dynamic_string/DynamicString.c"
             ex="false"
@@ -93,7 +103,17 @@
             tool="0"
             flavor2="2">
       </item>
-      <item path="../../src/main/server/newmain.cpp" ex="false" tool="1" flavor2="4">
+      <item path="../../src/main/server/main.c" ex="false" tool="0" flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem>build</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="../../src/main/server/nosql_db/NoSqlDB.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
       </item>
       <item path="../../src/main/server/nosql_db/NoSqlDBBlockSet.c"
             ex="false"
@@ -103,17 +123,39 @@
       <item path="../../src/main/server/nosql_db/NoSqlDBFile.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
       </item>
       <item path="../../src/main/server/nosql_db/NoSqlDBHandler.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/nosql_db/NoSqlDBUtils.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/reader/Reader.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/server/TcpServer.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
       </item>
       <folder path="0/allocator">
         <cTool>
           <incDir>
             <pElem>build/allocator</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/db_server">
+        <cTool>
+          <incDir>
+            <pElem>build/db_server</pElem>
           </incDir>
         </cTool>
       </folder>
@@ -135,6 +177,20 @@
         <cTool>
           <incDir>
             <pElem>build/nosql_db</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/reader">
+        <cTool>
+          <incDir>
+            <pElem>build/reader</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="0/server">
+        <cTool>
+          <incDir>
+            <pElem>build/server</pElem>
           </incDir>
         </cTool>
       </folder>

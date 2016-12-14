@@ -5,7 +5,19 @@
                    displayName="client"
                    projectFiles="true"
                    root="../../src/main/client">
-      <itemPath>../../src/main/client/newmain.cpp</itemPath>
+      <itemPath>../../src/main/client/mai.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="db_server"
+                   displayName="db_server"
+                   projectFiles="true"
+                   root="../../src/main/server/db_server">
+      <itemPath>../../src/main/server/db_server/DBServer.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="reader"
+                   displayName="reader"
+                   projectFiles="true"
+                   root="../../src/main/server/reader">
+      <itemPath>../../src/main/server/reader/Reader.c</itemPath>
     </logicalFolder>
     <logicalFolder name="server"
                    displayName="server"
@@ -26,6 +38,9 @@
         <logicalFolder name="allocator" displayName="allocator" projectFiles="true">
           <itemPath>../../src/main/server/include/allocator/Allocator.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="db_server" displayName="db_server" projectFiles="true">
+          <itemPath>../../src/main/server/include/db_server/DBServer.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="dynamic_string"
                        displayName="dynamic_string"
                        projectFiles="true">
@@ -35,10 +50,14 @@
           <itemPath>../../src/main/server/include/file_utils/FileHandler.h</itemPath>
         </logicalFolder>
         <logicalFolder name="nosql_db" displayName="nosql_db" projectFiles="true">
+          <itemPath>../../src/main/server/include/nosql_db/NoSqlDB.h</itemPath>
           <itemPath>../../src/main/server/include/nosql_db/NoSqlDBBlockSet.h</itemPath>
           <itemPath>../../src/main/server/include/nosql_db/NoSqlDBFile.h</itemPath>
           <itemPath>../../src/main/server/include/nosql_db/NoSqlDBHandler.h</itemPath>
           <itemPath>../../src/main/server/include/nosql_db/NoSqlDBUtils.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="server" displayName="server" projectFiles="true">
+          <itemPath>../../src/main/server/include/server/TcpServer.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="nosql_db" displayName="nosql_db" projectFiles="true">
@@ -48,7 +67,9 @@
         <itemPath>../../src/main/server/nosql_db/NoSqlDBHandler.c</itemPath>
         <itemPath>../../src/main/server/nosql_db/NoSqlDBUtils.c</itemPath>
       </logicalFolder>
-      <itemPath>../../src/main/server/newmain.cpp</itemPath>
+      <itemPath>../../src/main/server/server/TcpServer.c</itemPath>
+      <itemPath>../../src/main/server/main.c</itemPath>
+      <itemPath>../../src/main/server/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="src"
                    displayName="src"
@@ -188,9 +209,14 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="../../src/main/client/newmain.cpp" ex="false" tool="1" flavor2="4">
+      <item path="../../src/main/client/mai.cpp" ex="false" tool="1" flavor2="4">
       </item>
       <item path="../../src/main/server/allocator/Allocator.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+      </item>
+      <item path="../../src/main/server/db_server/DBServer.c"
             ex="false"
             tool="0"
             flavor2="2">
@@ -205,7 +231,15 @@
             tool="0"
             flavor2="2">
       </item>
-      <item path="../../src/main/server/newmain.cpp" ex="false" tool="1" flavor2="4">
+      <item path="../../src/main/server/main.c" ex="false" tool="0" flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem>build/build_server</pElem>
+            <pElem>../../src/main/server</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="../../src/main/server/main.cpp" ex="false" tool="1" flavor2="4">
       </item>
       <item path="../../src/main/server/nosql_db/NoSqlDB.c"
             ex="false"
@@ -226,21 +260,11 @@
             ex="false"
             tool="0"
             flavor2="2">
-        <cTool>
-          <incDir>
-            <pElem>../../src/main/server/nosql_db</pElem>
-          </incDir>
-        </cTool>
       </item>
       <item path="../../src/main/server/nosql_db/NoSqlDBHandler.c"
             ex="false"
             tool="0"
             flavor2="2">
-        <cTool>
-          <incDir>
-            <pElem>../../src/main/server/nosql_db</pElem>
-          </incDir>
-        </cTool>
       </item>
       <item path="../../src/main/server/nosql_db/NoSqlDBUtils.c"
             ex="false"
@@ -249,6 +273,22 @@
         <cTool>
           <incDir>
             <pElem>../../src/main/server/nosql_db</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="../../src/main/server/reader/Reader.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="../../src/main/server/server/TcpServer.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem>build/build_server/server</pElem>
+            <pElem>../../src/main/server/server</pElem>
           </incDir>
         </cTool>
       </item>
@@ -261,21 +301,11 @@
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-          <incDir>
-            <pElem>../../src/test/server_tester</pElem>
-          </incDir>
-        </ccTool>
       </item>
       <item path="../../src/test/server_tester/NoSqlDBBlockSetTester.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-          <incDir>
-            <pElem>../../src/test/server_tester</pElem>
-          </incDir>
-        </ccTool>
       </item>
       <item path="../../src/test/utils_tester/DynamicStringTester.cpp"
             ex="false"
@@ -290,6 +320,13 @@
             <pElem>../../src/main/client/include</pElem>
             <pElem>../../src/main/common/include</pElem>
             <pElem>build</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="0/server_tester">
+        <ccTool>
+          <incDir>
+            <pElem>../../src/test/server_tester</pElem>
           </incDir>
         </ccTool>
       </folder>
@@ -308,6 +345,21 @@
             <pElem>../../src/main/client</pElem>
           </incDir>
         </ccTool>
+      </folder>
+      <folder path="db_server">
+        <cTool>
+          <incDir>
+            <pElem>build/build_server/db_server</pElem>
+            <pElem>../../src/main/server/db_server</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <folder path="reader">
+        <cTool>
+          <incDir>
+            <pElem>build/build_server/reader</pElem>
+          </incDir>
+        </cTool>
       </folder>
       <folder path="server">
         <ccTool>
@@ -339,7 +391,6 @@
         <cTool>
           <incDir>
             <pElem>build/build_server/file_utils</pElem>
-            <pElem>../../src/main/server/file_utils</pElem>
           </incDir>
         </cTool>
       </folder>

@@ -5,12 +5,13 @@
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
             <name>FRI_OS_NOSQLDB_Main</name>
             <c-extensions>c</c-extensions>
-            <cpp-extensions>cpp</cpp-extensions>
+            <cpp-extensions>cc</cpp-extensions>
             <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>../../src/main</sourceRootElem>
+                <sourceRootElem>../../scripts</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

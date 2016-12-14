@@ -1,0 +1,55 @@
+NoSQL DBM systém implementovaný pomocou soketov (1)
+
+Vytvorte jednoduchý NoSQL databázový systém v jazyku C, ktorý umožní aplikácii ukladať dvojicu údajov – kľúč a hodnotu. Obe položky sú reťazce znakov. Server bude prijímať príkazy pomocou soketov v inet doméne. Navrhnite vhodný komunikačný protokol pre výmenu údajov medzi serverom a klientom. Klientská časť umožní:
+
+poslať na server novú dvojicu údajov, zadanú ako parameter
+opýtať sa na hodnotu asociovanú s daným kľúčom, zadaným ako parameter
+odstrániť dvojicu podľa zadaného kľúča, zadaného ako parameter
+Údaje odoslané na server musia byť zachované aj v prípade ukončenia a opätovného spustenia servera. Vytvorený server otestujte pomocou nasledujúcej aplikácie:
+
+Testovacie skripty
+
+Vytvorte skript na hľadanie a manipuláciu s duplicitnými súbormi. Zvoľte vhodný spôsob detekcie duplicít (veľkosť súboru, md5,...). Výsledkom činnosti skriptu bude bash skript, ktorý bude obsahovať príkazy na odstránenie duplicitných súborov. Ponechaný bude ten súbor, ktorý sa vyskytol pri prehľadávaní súborového systému ako prvý.
+
+Implementácia:
+
+Server sa skladá z dvoch základných častí: 
+    databáza , ktorá riadi zápis , vyhľadávanie a mazanie z databázového súboru
+    server, ktorý prijíma klientov spracováva ich požiadavky, zavolá príslušnú funkciu na databáze a odpovie klientovi
+    ->Databáza:
+        databáza ukladá key-value páry do súboru nasledovne. Celý súbor je rozdelený do blokov. Každý blok má rovnakú veľkosť. 
+    V blokoch sa ukladajú záznamy. záznam sa skladá z kľúča (key) ukončovacieho znaku (\0) a hodnoty (value) a ukončovacieho znaku (\0)
+    Ak chcem pridať záznam musím zistiť koľko blokov na jeho uloženie potrebujem a toľko si musím aj pripraviť. Ak alokujem viacej blokov tak prvý bude mat status BLOCK_HEAD a ďalšie BLOC_ASSIGNED.
+    Pri pridávaní najprv zistím či sa v súbore nenachádza taká dlhá sekvencia neobsadených blokov ak nie tak sa pridajú na koniec súboru.
+    Pri prehľadávaní sa postupne načítavajú záznamy a porovnávajú sa z hľadaným kľúčom.
+    Pri zmene sa vyhľadaný záznam uvoľní ( nastaví sa jeho blokom staus BLOCK_UNASSIGNED ) a ďalej sa postupuje ako pri pridávaní.
+    Pri mazaní záznamu sa bloky len uvoľnia
+
+    Sú definované tri základné funkcie GET SET a DEL
+    GET vyhľadáva v DB
+    SET najprv vyhľadá či taký kľuč už nie je v DB, ak áno odstráni ho a pridá novy
+    DEL odstráni záznam z DB
+
+    ->Server: Server prijíma klientov. Maximálna počet klientov je obmedzený počtom threadov, ktoré spracovávajú požiadavky.
+    Prístup klientov k databáze je riadený pomocou mutexu ( v jednom čaše môže pristupovať k DB len jedno vlákno ).
+    Server prijíma príkazy v tvare:
+        SET %key %val
+        GET %key
+        DEL %key
+    Odpovede odosiela nasledovne:
+    GET
+        ak sa nájde záznam odošle jeho hodnotu ukončenú \n ak sa nenájde odošle len \n
+    SET
+        odošle OK\n pre potvrdenie
+    DEL 
+        odošle OK\n pre potvrdenie
+    ->Spustenie: Server sa spustí s jedným parametrom ktorý určí port na ktorom sa server vytvorí
+
+Testovací skript v bash:
+    Otvorím si tcp spojenie pomocou príkazu exec a priradím ho do file decriptoru 3
+    Duplicitu testujem pomocou md5sum
+    Najprv odstránim z databázy všetky md5 prehľadávaných súborov ak sa tam nachádzajú už pred prehľadávaním
+    Potom znova prehľadávam súbory a zisťujem či taký md5 sa v databáze nenachádza. ak hej tak ho vypíšem a vypíšem aj z akým súborom je podobný.
+    Súbor zmažem ak script nebol spustený s prepínačom -s (simulácia)
+    ->Spustenie: Script sa spúšťa s parametrami : cislo_portu_lokalneho_serveru prehladavana_oblast [-s]
+

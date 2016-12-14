@@ -1,5 +1,5 @@
 #include <nosql_db/NoSqlDBHandler.h>
-#include <stdio.h>
+
 ErrorCode_t NoSqlDBHandler_openDB(NoSqlDBHandler * dbHandler, const char * filename) {
     ErrorCode_t returnCode = ERROR_FAILED;
 
@@ -53,9 +53,10 @@ static ErrorCode_t NoSqlDBHandler_loadRemainingBlocks(NoSqlDBHandler * dbHandler
 }
 
 ErrorCode_t NoSqlDBHandler_loadNextRecord(NoSqlDBHandler * dbHandler,
-        NoSqlDBBlockSet * blockSet, Bool_t * found, Bool_t * endOfFile) {
+        NoSqlDBBlockSet * blockSet, Bool_t * found, FilePosition_t * foundIndex, Bool_t * endOfFile) {
     ErrorCode_t returnCode = ERROR_FAILED;
     NoSqlDBBlock block;
+    FilePosition_t tempFoundIndex;
     *found = FALSE;
     *endOfFile = FALSE;
     returnCode = NoSqlDBBlockSet_empty(blockSet);
@@ -64,7 +65,10 @@ ErrorCode_t NoSqlDBHandler_loadNextRecord(NoSqlDBHandler * dbHandler,
         if (NO_ERROR == returnCode) {
             returnCode = NoSqlDBFile_hasNextBlock(&(dbHandler->file), endOfFile);
             if ((FALSE == *endOfFile) && (NO_ERROR == returnCode)) {
-                returnCode = NoSqlDBFile_readNextBlock(&(dbHandler->file), &block);
+                returnCode = FileHandler_getCurrentPos(&(dbHandler->file.fileHandler), &tempFoundIndex);
+                if (NO_ERROR == returnCode) {
+                    returnCode = NoSqlDBFile_readNextBlock(&(dbHandler->file), &block);
+                }
                 if (NO_ERROR == returnCode) {
                     if (NOSQL_DB_BLOCK_STATUS_HEAD == block.status) {
                         returnCode = NoSqlDBBlockSet_addBlock(blockSet);
@@ -75,6 +79,7 @@ ErrorCode_t NoSqlDBHandler_loadNextRecord(NoSqlDBHandler * dbHandler,
                             returnCode = NoSqlDBHandler_loadRemainingBlocks(
                                     dbHandler, blockSet, endOfFile);
                             if (NO_ERROR == returnCode) {
+                                *foundIndex = tempFoundIndex;
                                 *found = TRUE;
                             }
                         }
@@ -208,11 +213,9 @@ ErrorCode_t NoSqlDBHandler_writeBlocks(NoSqlDBHandler * dbHandler,
                 numberOfBlocks, 0U, &found, &foundIndex, &endOfFile);
         if (NO_ERROR == returnCode) {
             if (found == TRUE) {
-                printf("Overw blocks ... %d, %d %d %d\n",blockSet->currentNumberOfBlocks,numberOfBlocks,foundIndex,endOfFile);
                 returnCode = NoSqlDBHandler_overwriteBlocks(dbHandler,
                         foundIndex, blockSet);
             } else {
-                printf("Appending blocks\n");
                 returnCode = NoSqlDBHandler_appendBlocks(dbHandler, blockSet);
             }
         }

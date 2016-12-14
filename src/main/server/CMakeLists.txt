@@ -9,14 +9,21 @@ add_subdirectory(allocator)
 add_subdirectory(dynamic_string)
 add_subdirectory(file_utils)
 add_subdirectory(nosql_db)
+add_subdirectory(server)
+add_subdirectory(db_server)
+add_subdirectory(reader)
 
 add_library(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE)
 
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE reader)
 target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE allocator)
 target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE dynamic_string)
 target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE file_utils)
 target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE nosql_db)
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE server)
+target_link_libraries(FRI_OS_NOSQLDB_Server_lib_bundle INTERFACE db_server)
 
-add_executable(FRI_OS_NOSQLDB_Server newmain.cpp)
+add_executable(FRI_OS_NOSQLDB_Server main.c)
 
+target_link_libraries(FRI_OS_NOSQLDB_Server reader)
 target_link_libraries(FRI_OS_NOSQLDB_Server FRI_OS_NOSQLDB_Server_lib_bundle)

@@ -16,7 +16,8 @@ extern "C" {
         ERROR_INVALID_INPUT_PARAMETER = 4,
         ERROR_NOT_INITIALIZED = 5,
         ERROR_OUT_OF_RANGE = 6,
-        ERROR_CORRUPTED_FILE = 7
+        ERROR_CORRUPTED_FILE = 7,
+        ERROR_CREATE_ERROR = 8
     } ErrorCode_t;
 
     typedef enum {

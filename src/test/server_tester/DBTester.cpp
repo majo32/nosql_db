@@ -94,7 +94,7 @@ TEST(NoSqlDBHandlerTester, SimpleCases) {
     ASSERT_EQ(NO_ERROR, errorCode);
 
     errorCode = NoSqlDBHandler_loadNextRecord(&dbHandler,
-            &blockSet2, &found, &endOfFile);
+            &blockSet2, &found, &foundIndex, &endOfFile);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(TRUE, found);
     ASSERT_EQ(FALSE, endOfFile);
@@ -102,9 +102,10 @@ TEST(NoSqlDBHandlerTester, SimpleCases) {
     errorCode = NoSqlDBBlockSet_get(&blockSet2, 0, &block2);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(10, block2.data[0]);
+    ASSERT_EQ(0, foundIndex);
 
     errorCode = NoSqlDBHandler_loadNextRecord(&dbHandler,
-            &blockSet2, &found, &endOfFile);
+            &blockSet2, &found, &foundIndex, &endOfFile);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(TRUE, found);
     ASSERT_EQ(FALSE, endOfFile);
@@ -112,9 +113,10 @@ TEST(NoSqlDBHandlerTester, SimpleCases) {
     errorCode = NoSqlDBBlockSet_get(&blockSet2, 0, &block2);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(11, block2.data[0]);
+    ASSERT_EQ(sizeof(block2), foundIndex);
     
     errorCode = NoSqlDBHandler_loadNextRecord(&dbHandler,
-            &blockSet2, &found, &endOfFile);
+            &blockSet2, &found, &foundIndex, &endOfFile);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(FALSE, found);
     ASSERT_EQ(TRUE, endOfFile);
@@ -132,9 +134,13 @@ TEST(NoSqlDBHandlerTester, DBTest1) {
 
     
     DynamicString key;
+    DynamicString key2;
     DynamicString val;
     
     errorCode = DynamicString_create(&key);
+    ASSERT_EQ(NO_ERROR, errorCode);
+        
+    errorCode = DynamicString_create(&key2);
     ASSERT_EQ(NO_ERROR, errorCode);
     
     errorCode = DynamicString_create(&val);
@@ -172,11 +178,32 @@ TEST(NoSqlDBHandlerTester, DBTest1) {
     
     errorCode = NoSqlDB_del(&db,&key);
     ASSERT_EQ(NO_ERROR, errorCode);
-
     
+   
+    errorCode = DynamicString_appendString(&key2,"Kqwqwey2");
+    ASSERT_EQ(NO_ERROR, errorCode);
+    
+    errorCode = NoSqlDB_set(&db,&key2,&val);
+    ASSERT_EQ(NO_ERROR, errorCode);
+       
     errorCode = NoSqlDB_get(&db,&key,&val, &found);
     ASSERT_EQ(NO_ERROR, errorCode);
     ASSERT_EQ(FALSE, found);
+    
+    errorCode = NoSqlDB_set(&db,&key,&val);
+    ASSERT_EQ(NO_ERROR, errorCode);
+    
+    errorCode = NoSqlDB_get(&db,&key,&val, &found);
+    ASSERT_EQ(NO_ERROR, errorCode);
+    ASSERT_EQ(TRUE, found);
+    
+    errorCode = NoSqlDB_del(&db,&key2);
+    ASSERT_EQ(NO_ERROR, errorCode);
+    
+    errorCode = NoSqlDB_get(&db,&key2,&val, &found);
+    ASSERT_EQ(NO_ERROR, errorCode);
+    ASSERT_EQ(FALSE, found);
+    
     
     errorCode = DynamicString_empty(&key);
     ASSERT_EQ(NO_ERROR, errorCode);

@@ -1,6 +1,5 @@
 #include <nosql_db/NoSqlDB.h>
 #include <stdio.h>
-
 ErrorCode_t NoSqlDB_open(NoSqlDB * db, const char * filename) {
     ErrorCode_t returnCode = ERROR_FAILED;
 
@@ -9,7 +8,7 @@ ErrorCode_t NoSqlDB_open(NoSqlDB * db, const char * filename) {
     if (NO_ERROR == returnCode) {
         returnCode = NoSqlDBBlockSet_init(&(db->blockSetReadBuffer));
     }
-    
+
     if (NO_ERROR == returnCode) {
         returnCode = NoSqlDBBlockSet_init(&(db->blockSetWriteBuffer));
     }
@@ -41,6 +40,7 @@ ErrorCode_t NoSqlDB_get(NoSqlDB * db, const DynamicString * key, DynamicString *
     ErrorCode_t returnCode = ERROR_FAILED;
     Bool_t endOfFile = FALSE;
     Bool_t foundRecord = TRUE;
+    FilePosition_t foundIndex;
     *found = FALSE;
     char * cKey;
     char * c;
@@ -48,7 +48,7 @@ ErrorCode_t NoSqlDB_get(NoSqlDB * db, const DynamicString * key, DynamicString *
     returnCode = NoSqlDBHandler_navigateToTop(&(db->handler));
 
     if (NO_ERROR == returnCode) {
-        returnCode = DynamicString_getString(&(db->keyBuffer), &cKey);
+        returnCode = DynamicString_getString(key, &cKey);
     }
 
     if (NO_ERROR == returnCode) {
@@ -56,8 +56,8 @@ ErrorCode_t NoSqlDB_get(NoSqlDB * db, const DynamicString * key, DynamicString *
     }
 
     while ((NO_ERROR == returnCode) && (FALSE == *found) && (FALSE == endOfFile) && (TRUE == foundRecord)) {
-        returnCode = NoSqlDBHandler_loadNextRecord(&(db->handler), &(db->blockSetReadBuffer), &foundRecord, &endOfFile);
-         printf("%d <> %d",foundRecord,endOfFile);
+        returnCode = NoSqlDBHandler_loadNextRecord(&(db->handler), &(db->blockSetReadBuffer), 
+                &foundRecord, &foundIndex,&endOfFile);
         if ((TRUE == foundRecord) && (FALSE == endOfFile)) {
             if (NO_ERROR == returnCode) {
                 returnCode = NoSqlDBBlockSet_getKey(&(db->keyBuffer), &(db->blockSetReadBuffer));
@@ -66,9 +66,8 @@ ErrorCode_t NoSqlDB_get(NoSqlDB * db, const DynamicString * key, DynamicString *
                 returnCode = DynamicString_getString(&(db->keyBuffer), &c);
             }
             if (NO_ERROR == returnCode) {
-                printf("%s -> %s",c,cKey);
                 if (strcmp(c, cKey) == 0) {
-                    
+
                     *found = TRUE;
                     returnCode = NoSqlDBBlockSet_getValue(val, &(db->blockSetReadBuffer));
                 }
@@ -83,15 +82,11 @@ ErrorCode_t NoSqlDB_set(NoSqlDB * db, const DynamicString * key, const DynamicSt
     ErrorCode_t returnCode = ERROR_FAILED;
 
     returnCode = NoSqlDBBlockSet_createBlockSet(key, val, &(db->blockSetWriteBuffer));
-    
-    printf("---%d\n",db->blockSetReadBuffer.currentNumberOfBlocks);
-    
 
     if (NO_ERROR == returnCode) {
         returnCode = NoSqlDB_del(db, key);
     }
-printf("---2>%d\n",db->blockSetReadBuffer.currentNumberOfBlocks);
-        
+
     if (NO_ERROR == returnCode) {
         returnCode = NoSqlDBHandler_writeBlocks(&(db->handler), &(db->blockSetWriteBuffer));
     }
@@ -104,6 +99,7 @@ ErrorCode_t NoSqlDB_del(NoSqlDB * db, const DynamicString * key) {
     Bool_t endOfFile = FALSE;
     Bool_t foundRecord = TRUE;
     Bool_t found = FALSE;
+    FilePosition_t foundIndex;
     size_t numberOfBlocks;
     char * cKey;
     char * c;
@@ -113,9 +109,10 @@ ErrorCode_t NoSqlDB_del(NoSqlDB * db, const DynamicString * key) {
     if (NO_ERROR == returnCode) {
         returnCode = DynamicString_getString(&(db->keyBuffer), &cKey);
     }
-printf("--->%d\n",db->blockSetReadBuffer.currentNumberOfBlocks);
+
     while ((NO_ERROR == returnCode) && (FALSE == found) && (FALSE == endOfFile) && (TRUE == foundRecord)) {
-        returnCode = NoSqlDBHandler_loadNextRecord(&(db->handler), &(db->blockSetReadBuffer), &foundRecord, &endOfFile);
+        returnCode = NoSqlDBHandler_loadNextRecord(&(db->handler), &(db->blockSetReadBuffer), 
+                &foundRecord, &foundIndex, &endOfFile);
         if ((TRUE == foundRecord) && (FALSE == endOfFile)) {
             if (NO_ERROR == returnCode) {
                 returnCode = NoSqlDBBlockSet_getKey(&(db->keyBuffer), &(db->blockSetReadBuffer));
@@ -126,14 +123,13 @@ printf("--->%d\n",db->blockSetReadBuffer.currentNumberOfBlocks);
 
             if (NO_ERROR == returnCode) {
                 returnCode = NoSqlDBBlockSet_length(&(db->blockSetReadBuffer), &numberOfBlocks);
-                printf("---3>%d\n",numberOfBlocks);
             }
 
             if (NO_ERROR == returnCode) {
                 if (strcmp(c, cKey) == 0) {
                     found = TRUE;
                     returnCode = NoSqlDBHandler_invalidateBlocks(&(db->handler),
-                            0, numberOfBlocks); !!! add valid file pos
+                            foundIndex, numberOfBlocks);
                 }
             }
         }

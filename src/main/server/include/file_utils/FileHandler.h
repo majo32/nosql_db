@@ -20,6 +20,8 @@ extern "C" {
     ErrorCode_t FileHandler_create(FileHandler * filehandler, const char * fileName);
     
     ErrorCode_t FileHandler_close(FileHandler * filehandler);
+    
+    ErrorCode_t FileHandler_exists(const char * fileName, Bool_t * exists);
 
     ErrorCode_t FileHandler_read(FileHandler * filehandler, void * dest, size_t size);
     

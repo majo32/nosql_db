@@ -1,4 +1,5 @@
 #include <file_utils/FileHandler.h>
+#include <unistd.h>
 
 ErrorCode_t FileHandler_open(FileHandler * filehandler, const char * fileName) {
     ErrorCode_t returnCode = ERROR_FAILED;
@@ -39,6 +40,20 @@ ErrorCode_t FileHandler_close(FileHandler * filehandler) {
     retval = fclose(filehandler->file);
 
     if (0U == retval) {
+        returnCode = NO_ERROR;
+    }
+
+    return returnCode;
+}
+
+ErrorCode_t FileHandler_exists(const char * fileName, Bool_t * exists) {
+    ErrorCode_t returnCode = ERROR_FAILED;
+
+    if (access(fileName, F_OK) != -1) {
+        *exists = TRUE;
+        returnCode = NO_ERROR;
+    } else {
+        *exists = FALSE;
         returnCode = NO_ERROR;
     }
 

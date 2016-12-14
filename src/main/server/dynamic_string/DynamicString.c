@@ -13,6 +13,10 @@ ErrorCode_t DynamicString_create(DynamicString * dstring) {
     dstring->stringLenght = 0;
 
     returnCode = DynamicString_allocateIfNeeded(dstring, DYNAMIC_STRING_ALLOCATION_PADDING);
+    
+    if(NO_ERROR == returnCode){
+        dstring->content[0] = '\0'; 
+    }
 
     return returnCode;
 }

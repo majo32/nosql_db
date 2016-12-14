@@ -18,7 +18,7 @@ extern "C" {
     ErrorCode_t NoSqlDBHandler_closeDB(NoSqlDBHandler * dbHandler);
 
     ErrorCode_t NoSqlDBHandler_loadNextRecord(NoSqlDBHandler * dbHandler,
-            NoSqlDBBlockSet * blockSet, Bool_t * found, Bool_t * endOfFile);
+            NoSqlDBBlockSet * blockSet, Bool_t * found, FilePosition_t * foundIndex, Bool_t * endOfFile);
 
     ErrorCode_t NoSqlDBHandler_findFreeBlocks(NoSqlDBHandler * dbHandler,
             size_t size, FilePosition_t startPos, Bool_t * found, size_t * foundIndex, Bool_t * endOfFile);
